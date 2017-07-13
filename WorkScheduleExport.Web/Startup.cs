@@ -2,6 +2,8 @@
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
+using WorkScheduleExport.Web.Infrastructure;
+using WorkScheduleExport.Web.Infrastructure.Export;
 
 namespace WorkScheduleExport.Web
 {
@@ -10,6 +12,8 @@ namespace WorkScheduleExport.Web
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddMvc();
+            services.AddScoped<IWorkScheduleExporter, ICalendarExporter>();
+            services.AddScoped<IWorkScheduleReaderFactory, HtmlWorkScheduleReaderFactory>();
         }
 
         public void Configure(IApplicationBuilder app, IHostingEnvironment env, ILoggerFactory loggerFactory)
