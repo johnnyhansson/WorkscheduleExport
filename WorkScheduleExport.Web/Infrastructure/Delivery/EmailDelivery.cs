@@ -21,13 +21,13 @@ namespace WorkScheduleExport.Web.Infrastructure.Delivery
         public void Deliver(WorkSchedule workSchedule, byte[] exportedWorkSchedule, WorkScheduleDeliveryOptions options)
         {
             var bodyBuilder = new BodyBuilder();
-            bodyBuilder.TextBody = $"Här kommer ditt arbetsschema för perioden {workSchedule}.";
+            bodyBuilder.TextBody = $"Här kommer ditt exporterade arbetsschema.";
             bodyBuilder.Attachments.Add("Arbetsschema.ics", new MemoryStream(exportedWorkSchedule));
 
             var message = new MimeMessage();
             message.From.Add(new MailboxAddress(configuration.From));
             message.To.Add(new MailboxAddress(options.Target));
-            message.Subject = $"Ditt arbetsschema för perioden {workSchedule}";
+            message.Subject = $"Ditt exporterade arbetsschema";
             message.Body = bodyBuilder.ToMessageBody();
 
             using (SmtpClient client = new SmtpClient())
