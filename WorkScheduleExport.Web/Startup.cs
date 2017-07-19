@@ -23,7 +23,8 @@ namespace WorkScheduleExport.Web
             }
             else if (env.IsProduction())
             {
-                configurationBuilder.AddJsonFile("emailconfiguration.json");
+                configurationBuilder.AddJsonFile("emailconfiguration.json", optional: true);
+                configurationBuilder.AddEnvironmentVariables();
             }
 
             configuration = configurationBuilder.Build();
