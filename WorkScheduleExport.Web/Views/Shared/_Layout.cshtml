@@ -6,7 +6,7 @@
     <link rel="icon" type="image/png" href="~/favicon.png">
     <link rel="stylesheet" type="text/css" href="~/css/bootstrap.min.css" />
     <link rel="stylesheet" type="text/css" href="~/css/global.min.css" />
-    <title>@ViewBag.Title</title>
+    <title>@ViewBag.Title - @Environment.GetEnvironmentVariable("BUILD")</title>
 </head>
 <body>
     <div class="flex-container">
