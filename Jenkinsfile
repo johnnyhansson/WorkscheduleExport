@@ -29,6 +29,7 @@ node {
 						image.push()
 					}
 				}
+				sh "chmod +x tools/start-container.sh"
 				sh "tools/start-container.sh"
 				cleanWs()
 			}
