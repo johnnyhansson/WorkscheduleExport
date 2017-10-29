@@ -30,6 +30,7 @@ node {
 					}
 				}
 				sh "chmod +x tools/start-container.sh"
+				sh "dos2unix tools/start-container.sh"
 				sh "tools/start-container.sh"
 				cleanWs()
 			}
