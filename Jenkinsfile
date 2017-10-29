@@ -3,17 +3,17 @@ node {
 		checkout scm
 
 		stage("Build") {
-			bat "dotnet build -c %CONFIGURATION%"
+			bat "dotnet build -c ${params.CONFIGURATION}"
 			
 			dir("WorkScheduleExport.Web") {
-				bat "dotnet publish -c %CONFIGURATION% -r linux-arm -o publish"
+				bat "dotnet publish -c ${params.CONFIGURATION} -r linux-arm -o publish"
 				stash name: "binaries", includes: "dockerfile.raspberrypi,publish/"
 			}
 		}
 
 		stage("Test") {
 			dir("WorkScheduleExport.Web.UnitTests") {
-				bat "dotnet xunit -configuration %CONFIGURATION% -nobuild -xml unittests.xml"
+				bat "dotnet xunit -configuration ${params.CONFIGURATION} -nobuild -xml unittests.xml"
 			}
 		}
 
@@ -21,10 +21,11 @@ node {
 			node("Arm") {
 				unstash "binaries"
 				sh "mv dockerfile.raspberrypi Dockerfile"
-				docker.withRegistry("%DOCKER_REGISTRY_URL%", "%DOCKER_REGISTRY_CREDENTIAL_ID%") {
+				docker.withRegistry("${params.DOCKER_REGISTRY_URL}", "${params.DOCKER_REGISTRY_CREDENTIAL_ID}") {
 					def image = docker.build("workscheduleexport:${env.BUILD_ID}")
 					image.push()
 				}
+				cleanWs()
 			}
 		}
     }
