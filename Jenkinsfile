@@ -25,7 +25,7 @@ node {
 					def image = docker.build("workscheduleexport:${env.BUILD_ID}")
 					image.push()
 				}
-				sh "$(docker ps -a | grep workschedule) && docker rm -f workscheduleexport"
+				sh "\$(docker ps -a | grep workschedule) && docker rm -f workscheduleexport"
 				sh "docker run -d -p 5000:5000 --name workscheduleexport --restart=always -e BUILD='${env.BUILD_ID}' ${params.DOCKER_REGISTRY_URL}/workscheduleexport:${env.BUILD_ID}"
 				cleanWs()
 			}
