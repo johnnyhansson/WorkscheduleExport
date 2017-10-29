@@ -6,6 +6,7 @@ node {
 			bat "dotnet build -c ${params.CONFIGURATION}"
 			
 			dir("WorkScheduleExport.Web") {
+				bat "npm install"
 				bat "dotnet publish -c ${params.CONFIGURATION} -r linux-arm -o publish"
 			}
 
