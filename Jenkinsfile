@@ -24,7 +24,7 @@ node {
 
 				dir("WorkScheduleExport.Web") {
 					sh "mv dockerfile.raspberrypi Dockerfile"
-					docker.withRegistry("${params.DOCKER_REGISTRY_URL}", "${params.DOCKER_REGISTRY_CREDENTIAL_ID}") {
+					docker.withRegistry("https://${params.DOCKER_REGISTRY_ADDRESS}", "${params.DOCKER_REGISTRY_CREDENTIAL_ID}") {
 						def image = docker.build("workscheduleexport:${env.BUILD_ID}")
 						image.push()
 					}
