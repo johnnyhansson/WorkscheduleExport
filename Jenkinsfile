@@ -7,8 +7,9 @@ node {
 			
 			dir("WorkScheduleExport.Web") {
 				bat "dotnet publish -c ${params.CONFIGURATION} -r linux-arm -o publish"
-				stash name: "binaries", includes: "dockerfile.raspberrypi,publish/"
 			}
+
+			stash name: "binaries", includes: "WorkScheduleExport.Web/dockerfile.raspberrypi,WorkScheduleExport.Web/publish/,tools/start-container.sh"
 		}
 
 		stage("Test") {
@@ -20,13 +21,15 @@ node {
 		stage("Deploy") {
 			node("Arm") {
 				unstash "binaries"
-				sh "mv dockerfile.raspberrypi Dockerfile"
-				docker.withRegistry("${params.DOCKER_REGISTRY_URL}", "${params.DOCKER_REGISTRY_CREDENTIAL_ID}") {
-					def image = docker.build("workscheduleexport:${env.BUILD_ID}")
-					image.push()
+
+				dir("WorkScheduleExport.Web") {
+					sh "mv dockerfile.raspberrypi Dockerfile"
+					docker.withRegistry("${params.DOCKER_REGISTRY_URL}", "${params.DOCKER_REGISTRY_CREDENTIAL_ID}") {
+						def image = docker.build("workscheduleexport:${env.BUILD_ID}")
+						image.push()
+					}
 				}
-				sh "\$(docker ps -a | grep workschedule) && docker rm -f workscheduleexport"
-				sh "docker run -d -p 5000:5000 --name workscheduleexport --restart=always -e BUILD='${env.BUILD_ID}' ${params.DOCKER_REGISTRY_URL}/workscheduleexport:${env.BUILD_ID}"
+				sh "tools/start-container.sh"
 				cleanWs()
 			}
 		}
