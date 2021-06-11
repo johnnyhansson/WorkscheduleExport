@@ -12,50 +12,45 @@ namespace WorkScheduleExport.Web
 {
     public class Startup
     {
-        private readonly IConfigurationRoot configuration;
-
-        public Startup(IHostingEnvironment env)
+        public Startup(IConfiguration configuration)
         {
-            var configurationBuilder = new ConfigurationBuilder();
-
-            if (env.IsDevelopment())
-            {
-                configurationBuilder.AddUserSecrets<EmailConfiguration>();
-            }
-            else if (env.IsProduction())
-            {
-                configurationBuilder.AddJsonFile("emailconfiguration.json", optional: true);
-                configurationBuilder.AddEnvironmentVariables();
-            }
-
-            configuration = configurationBuilder.Build();
+            Configuration = configuration;
         }
+
+        public IConfiguration Configuration { get; }
 
         public void ConfigureServices(IServiceCollection services)
         {
-            services.AddMvc();
+            services.AddControllersWithViews();
             services.AddScoped<IWorkScheduleExporter, ICalendarExporter>();
             services.AddScoped<IWorkScheduleReaderFactory, HtmlWorkScheduleReaderFactory>();
             services.AddScoped<IWorkScheduleDeliveryService, EmailDelivery>();
-            services.AddSingleton(configuration.Get<EmailConfiguration>());
+            services.AddSingleton(Configuration.GetSection("EmailConfiguration").Get<EmailConfiguration>());
         }
 
         public void Configure(IApplicationBuilder app, IHostingEnvironment env, ILoggerFactory loggerFactory)
         {
-            loggerFactory.AddConsole();
-
             if (env.IsDevelopment())
             {
                 app.UseDeveloperExceptionPage();
             }
-
-            app.UseForwardedHeaders(new ForwardedHeadersOptions
+            else
             {
-                ForwardedHeaders = ForwardedHeaders.XForwardedFor | ForwardedHeaders.XForwardedProto
-            });
+                app.UseExceptionHandler("/Home/Error");
+            }
 
             app.UseStaticFiles();
-            app.UseMvcWithDefaultRoute();
+
+            app.UseRouting();
+
+            app.UseAuthorization();
+
+            app.UseEndpoints(endpoints =>
+            {
+                endpoints.MapControllerRoute(
+                    name: "default",
+                    pattern: "{controller=Home}/{action=Index}/{id?}");
+            });
         }
     }
 }

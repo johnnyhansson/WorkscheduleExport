@@ -1,6 +1,6 @@
 {
   "version": "1.0.0",
-  "name": "WorkScheduleExport",
+  "name": "workscheduleexport",
   "private": true,
   "devDependencies": {
     "bootstrap": "~3.3.7",

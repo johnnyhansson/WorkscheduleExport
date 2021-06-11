@@ -6,9 +6,8 @@
       "node_modules/bootstrap/dist/css/bootstrap-theme.min.css"
     ],
     "minify": {
-      "enabled": false
-    },
-    "includeInProject": false
+      "enabled": true
+    }
   },
   {
     "outputFileName": "wwwroot/css/global.min.css",
@@ -17,8 +16,7 @@
     ],
     "minify": {
       "enabled": true
-    },
-    "includeInProject": false
+    }
   },
   {
     "outputFileName": "wwwroot/js/bootstrap.min.js",
@@ -26,8 +24,7 @@
       "node_modules/bootstrap/dist/js/bootstrap.min.js"
     ],
     "minify": {
-      "enabled": false
-    },
-    "includeInProject": false
+      "enabled": true
+    }
   }
 ]
