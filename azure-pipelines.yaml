@@ -1,0 +1,31 @@
+trigger:
+  - master
+
+pool:
+  vmImage: 'ubuntu-20.04'
+
+variables:
+  DOCKER_CLI_EXPERIMENTAL: enabled
+
+stages:
+  - stage: 
+    displayName: Build
+    jobs:
+      - job:
+        displayName: Build
+        steps:
+          - task: Docker@2
+            displayName: Login to private registry
+            inputs:
+              containerRegistry: 'private-registry'
+              command: 'login'
+          - script: |
+              docker run --privileged --rm tonistiigi/binfmt --install all
+              docker buildx create --name builder --use
+              docker buildx inspect builder --bootstrap
+              docker buildx build --platform linux/arm/v7 \
+                --build-arg FEED_ACCESSTOKEN=$(FEED_ACCESSTOKEN) \
+                -t registry.cederholm.eu/workscheduleexport:1.0.0 \
+              --push \
+              .
+            displayName: Build and push Docker image
