@@ -12,16 +12,9 @@ ENV DOCKER "true"
 
 RUN curl -L https://raw.githubusercontent.com/Microsoft/artifacts-credprovider/master/helpers/installcredprovider.sh  | bash
 
-RUN if [ "$TARGETPLATFORM" = "linux/amd64" ]; then \
-        RID=linux-x64 ; \
-    elif [ "$TARGETPLATFORM" = "linux/arm64" ]; then \
-        RID=linux-arm64 ; \
-    elif [ "$TARGETPLATFORM" = "linux/arm/v7" ]; then \
-        RID=linux-arm ; \
-    fi \
-    && dotnet publish -c release -o /app -r $RID --self-contained false
+RUN dotnet publish -c release -o /app /p:UseAppHost=false
 
 FROM mcr.microsoft.com/dotnet/aspnet:3.1-buster-slim-arm32v7
 WORKDIR /app
 COPY --from=build /app .
-ENTRYPOINT ["./WorkScheduleExport.Web"]
+ENTRYPOINT ["dotnet", "./WorkScheduleExport.Web.dll"]
