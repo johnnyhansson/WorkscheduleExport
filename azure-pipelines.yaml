@@ -19,6 +19,10 @@ stages:
             inputs:
               containerRegistry: 'private-registry'
               command: 'login'
+          - task: Npm@1
+            inputs:
+              command: 'install'
+              workingDir: WorkScheduleExport.Web
           - script: |
               docker run --privileged --rm tonistiigi/binfmt --install all
               docker buildx create --name builder --use

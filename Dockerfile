@@ -12,7 +12,6 @@ ENV DOCKER "true"
 
 RUN curl -L https://raw.githubusercontent.com/Microsoft/artifacts-credprovider/master/helpers/installcredprovider.sh  | bash
 
-RUN cd WorkScheduleExport.Web && npm install
 RUN dotnet publish -c release -o /app /p:UseAppHost=false
 
 FROM mcr.microsoft.com/dotnet/aspnet:3.1-buster-slim-arm32v7
