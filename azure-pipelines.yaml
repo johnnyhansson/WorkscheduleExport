@@ -29,7 +29,7 @@ stages:
               docker buildx inspect builder --bootstrap
               docker buildx build --platform linux/arm/v7 \
                 --build-arg FEED_ACCESSTOKEN=$(FEED_ACCESSTOKEN) \
-                -t registry.cederholm.eu/workscheduleexport:1.0.1 \
+                -t registry.cederholm.eu/workscheduleexport:1.0.2 \
               --push \
               .
             displayName: Build and push Docker image
