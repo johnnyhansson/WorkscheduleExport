@@ -4,6 +4,7 @@
     <TargetFramework>netcoreapp3.1</TargetFramework>
     <UserSecretsId>52c80848-79a4-4511-8af7-39bffeec9788</UserSecretsId>
     <EnableDefaultContentItems>false</EnableDefaultContentItems>
+    <UseAppHost>false</UseAppHost>
   </PropertyGroup>
 
   <ItemGroup>
@@ -17,8 +18,4 @@
     <PackageReference Include="Microsoft.Extensions.Configuration.UserSecrets" Version="3.1.16" />
     <PackageReference Include="TimeCare.WorkSchedule" Version="1.0.1" />
   </ItemGroup>
-  <ItemGroup>
-    <Folder Include="wwwroot\js\" />
-  </ItemGroup>
-
 </Project>

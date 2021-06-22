@@ -12,7 +12,7 @@ ENV DOCKER "true"
 
 RUN curl -L https://raw.githubusercontent.com/Microsoft/artifacts-credprovider/master/helpers/installcredprovider.sh  | bash
 
-RUN dotnet publish -c release -o /app /p:UseAppHost=false
+RUN dotnet build -c release && dotnet publish -c release -o /app --no-build
 
 FROM mcr.microsoft.com/dotnet/aspnet:3.1-buster-slim-arm32v7
 WORKDIR /app
